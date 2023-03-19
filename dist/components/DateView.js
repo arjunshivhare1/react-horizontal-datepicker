@@ -66,19 +66,19 @@ const DateView = ({
               key: currentDay,
               onClick: () => onDateClick(currentDay),
             },
-            format(currentDay, dayFormat)
-          ),
-          /*#__PURE__*/ React.createElement(
-            "div",
-            {
-              className: styles.dateLabel,
-            },
+            /*#__PURE__*/ React.createElement(
+              "div",
+              {
+                className: styles.dateLabel,
+              },
+              format(currentDay, dateFormat)
+            ),
             /*#__PURE__*/ React.createElement(
               "div",
               {
                 className: styles.dayLabel,
               },
-              format(currentDay, dateFormat)
+              format(currentDay, dayFormat)
             )
           )
         );
