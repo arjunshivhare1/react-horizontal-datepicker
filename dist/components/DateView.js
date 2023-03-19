@@ -1,7 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import styles from "./DatePicker.module.css";
-import { addDays, addMonths, differenceInMonths, format, isSameDay, lastDayOfMonth, startOfMonth } from "date-fns";
+import {
+  addDays,
+  addMonths,
+  differenceInMonths,
+  format,
+  isSameDay,
+  lastDayOfMonth,
+  startOfMonth,
+} from "date-fns";
 
 const DateView = ({
   startDate,
@@ -9,34 +17,30 @@ const DateView = ({
   selectDate,
   getSelectedDay,
   primaryColor,
-  labelFormat
+  labelFormat,
 }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const firstSection = {
-    marginLeft: '40px'
+    marginLeft: "40px",
   };
   const selectedStyle = {
-    fontWeight: "bold",
-    width: "45px",
-    height: "45px",
-    borderRadius: "50%",
-    border: `2px solid ${primaryColor}`,
-    color: primaryColor
+    color: "#FFFFFF",
+    borderRight: "1px solid #b3b3b3",
   };
   const labelColor = {
-    color: primaryColor
+    color: primaryColor,
   };
 
-  const getStyles = day => {
+  const getStyles = (day) => {
     return isSameDay(day, selectedDate) ? selectedStyle : null;
   };
 
-  const getId = day => {
-    return isSameDay(day, selectedDate) ? 'selected' : "";
+  const getId = (day) => {
+    return isSameDay(day, selectedDate) ? "selected" : "";
   };
 
   const renderDays = () => {
-    const dayFormat = "E";
+    const dayFormat = "iiii";
     const dateFormat = "d";
     const months = [];
     let days = [];
@@ -45,43 +49,80 @@ const DateView = ({
       let start, end;
       const month = startOfMonth(addMonths(startDate, i));
       start = i === 0 ? Number(format(startDate, dateFormat)) - 1 : 0;
-      end = i === differenceInMonths(lastDate, startDate) ? Number(format(lastDate, "d")) : Number(format(lastDayOfMonth(month), "d"));
+      end =
+        i === differenceInMonths(lastDate, startDate)
+          ? Number(format(lastDate, "d"))
+          : Number(format(lastDayOfMonth(month), "d"));
 
       for (let j = start; j < end; j++) {
         let currentDay = addDays(month, j);
-        days.push( /*#__PURE__*/React.createElement("div", {
-          id: `${getId(currentDay)}`,
-          className: styles.dateDayItem,
-          style: getStyles(currentDay),
-          key: currentDay,
-          onClick: () => onDateClick(currentDay)
-        }, /*#__PURE__*/React.createElement("div", {
-          className: styles.dayLabel
-        }, format(currentDay, dayFormat)), /*#__PURE__*/React.createElement("div", {
-          className: styles.dateLabel
-        }, format(currentDay, dateFormat))));
+        days.push(
+          /*#__PURE__*/ React.createElement(
+            "div",
+            {
+              id: `${getId(currentDay)}`,
+              className: styles.dateDayItem,
+              style: getStyles(currentDay),
+              key: currentDay,
+              onClick: () => onDateClick(currentDay),
+            },
+            format(currentDay, dayFormat)
+          ),
+          /*#__PURE__*/ React.createElement(
+            "div",
+            {
+              className: styles.dateLabel,
+            },
+            /*#__PURE__*/ React.createElement(
+              "div",
+              {
+                className: styles.dayLabel,
+              },
+              format(currentDay, dateFormat)
+            )
+          )
+        );
       }
 
-      months.push( /*#__PURE__*/React.createElement("div", {
-        className: styles.monthContainer,
-        key: month
-      }, /*#__PURE__*/React.createElement("span", {
-        className: styles.monthYearLabel,
-        style: labelColor
-      }, format(month, labelFormat || "MMMM yyyy")), /*#__PURE__*/React.createElement("div", {
-        className: styles.daysContainer,
-        style: i === 0 ? firstSection : null
-      }, days)));
+      months.push(
+        /*#__PURE__*/ React.createElement(
+          "div",
+          {
+            className: styles.monthContainer,
+            key: month,
+          },
+          /*#__PURE__*/ React.createElement(
+            "span",
+            {
+              className: styles.monthYearLabel,
+              style: labelColor,
+            },
+            format(month, labelFormat || "MMMM yyyy")
+          ),
+          /*#__PURE__*/ React.createElement(
+            "div",
+            {
+              className: styles.daysContainer,
+              style: i === 0 ? firstSection : null,
+            },
+            days
+          )
+        )
+      );
       days = [];
     }
 
-    return /*#__PURE__*/React.createElement("div", {
-      id: "container",
-      className: styles.dateListScrollable
-    }, months);
+    return /*#__PURE__*/ React.createElement(
+      "div",
+      {
+        id: "container",
+        className: styles.dateListScrollable,
+      },
+      months
+    );
   };
 
-  const onDateClick = day => {
+  const onDateClick = (day) => {
     setSelectedDate(day);
 
     if (getSelectedDay) {
@@ -103,20 +144,20 @@ const DateView = ({
       if (!isSameDay(selectedDate, selectDate)) {
         setSelectedDate(selectDate);
         setTimeout(() => {
-          let view = document.getElementById('selected');
+          let view = document.getElementById("selected");
 
           if (view) {
             view.scrollIntoView({
               behavior: "smooth",
               inline: "center",
-              block: "nearest"
+              block: "nearest",
             });
           }
         }, 20);
       }
     }
   }, [selectDate]);
-  return /*#__PURE__*/React.createElement(React.Fragment, null, renderDays());
+  return /*#__PURE__*/ React.createElement(React.Fragment, null, renderDays());
 };
 
 export { DateView };
